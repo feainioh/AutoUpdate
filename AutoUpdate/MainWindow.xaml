@@ -6,21 +6,39 @@
         xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:AutoUpdate"
         mc:Ignorable="d"
-        Title="自动更新" Height="450" Width="800">
-    <Grid>
+        Title="自动更新" Height="300" Width="500" FontFamily="{StaticResource FontAwesome}" FontSize="16">
+    <Grid>        
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <pu:Loading Grid.Row="0" Height="150"  Width="150" LoadingStyle="Ring2" IsRunning="True" Foreground="YellowGreen"></pu:Loading>
-        <Grid Grid.Row="1">
+        <ProgressBar Grid.Row="0" Height="150" Width="150"  pu:ProgressBarHelper.ProgressBarStyle="Ring" pu:ProgressBarHelper.IsPercentVisible="True" FontSize="35" Value="60" Maximum="100" Foreground="YellowGreen"></ProgressBar>
+        <Grid Grid.Row="1" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <pu:PUTextBlock Grid.Row="0" Grid.Column="1" Text="文件数量:" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="0" Grid.Column="2" Text="1" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="0" Grid.Column="3" Text="当前:" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="0" Grid.Column="4" Text="1" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="1" HorizontalAlignment="Right" Grid.Column="0" Text="总进度:" Margin="2"/>
+            <ProgressBar Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Maximum="100" Value="50" Foreground="YellowGreen" pu:ProgressBarHelper.CornerRadius="5" pu:ProgressBarHelper.IsPercentVisible="True"  Margin="2"/>
+            <pu:PUTextBlock Grid.Row="2" Grid.Column="1" Text="文件名:" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="2" Grid.Column="2" Text="1" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="2" Grid.Column="3" Text="大小:" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="2" Grid.Column="4" Text="1" Margin="2"/>
+            <pu:PUTextBlock Grid.Row="3" HorizontalAlignment="Left" Grid.Column="0" Text="当前:" Margin="2"/>
+            <ProgressBar Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Maximum="100" Value="50" Foreground="YellowGreen" pu:ProgressBarHelper.CornerRadius="5" pu:ProgressBarHelper.IsPercentVisible="True"  Margin="2"/>
         </Grid>
     </Grid>
 </Window>
