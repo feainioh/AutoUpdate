@@ -6,7 +6,7 @@
         xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:AutoUpdate"
         mc:Ignorable="d"
-        Title="自动更新" Height="300" Width="500" FontFamily="{StaticResource FontAwesome}" FontSize="16" Loaded="Window_Loaded">
+        Title="自动更新" Height="300" Width="500" FontFamily="{StaticResource FontAwesome}" FontSize="16" Loaded="Window_Loaded" Icon="System_Update.ico">
     <Grid>        
         <Grid.RowDefinitions>
             <RowDefinition/>

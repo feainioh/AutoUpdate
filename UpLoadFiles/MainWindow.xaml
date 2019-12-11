@@ -3,10 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:UpLoadFiles"
         mc:Ignorable="d"
-        Title="上传文件" Height="450" Width="800">
-    <Grid>
-        
+        Title="上传文件" Height="300" Width="500" Icon="upload.ico" FontSize="16" FontFamily="{StaticResource FontAwesome}">
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" CornerRadius="5" Background="#FF7FDFE8" Margin="3" Grid.ColumnSpan="3">
+            <pu:PUTextBlock Text="上传文件到服务器" HorizontalAlignment="Center" Margin="2"/>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="0" CornerRadius="5" Background="#FFCEE7FF" Margin="5">
+            <DataGrid x:Name="dg_ServerFiles" pu:DataGridHelper.RowMinHeight="20" pu:DataGridHelper.HeaderMinHeight="25" pu:DataGridHelper.ColumnHorizontalContentAlignment="Center" pu:DataGridHelper.SelectedBackground="#440500FF" pu:DataGridHelper.HoverBackground="#220500FF" CanUserAddRows="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="文件列表" Binding="{Binding WindowNO}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="2" CornerRadius="5" Background="#FFCEE7FF" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+            </Grid>
+        </Border>
     </Grid>
 </Window>

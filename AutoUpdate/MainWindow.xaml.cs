@@ -17,6 +17,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
+using Panuon.UI.Silver;
 
 namespace AutoUpdate
 {
@@ -70,7 +71,7 @@ namespace AutoUpdate
             {
                 this.Dispatcher.Invoke(new Action(() =>
                 {
-                    MessageBox.Show("连接服务器失败，稍后重试。");
+                    Notice.Show("连接服务器失败，稍后重试","提示",3,MessageBoxIcon.Warning);
                 }));
                 return;
             }
