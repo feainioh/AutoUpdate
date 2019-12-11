@@ -56,19 +56,27 @@ namespace UpLoadFiles
 
        private void UploadFile_Click(object sender, RoutedEventArgs e)
        {
-           form.OpenFileDialog _dialog = new form.OpenFileDialog();
-           _dialog.Multiselect = true;
-           if (_dialog.ShowDialog() == form.DialogResult.OK)
-           {
-               string[] _files = _dialog.FileNames;
-              if (_files != null && _files.Length > 0)
-               {
-                   foreach (var item in _files)
-                   {
-                       Upload(item);
-                   }
-               }
-           }
+            if (txt_webUri.Text != "")
+            {
+                form.OpenFileDialog _dialog = new form.OpenFileDialog();
+                _dialog.Multiselect = true;
+                if (_dialog.ShowDialog() == form.DialogResult.OK)
+                {
+                    string[] _files = _dialog.FileNames;
+                    if (_files != null && _files.Length > 0)
+                    {
+                        foreach (var item in _files)
+                        {
+                            Upload(item);
+                        }
+                    }
+                }
+            }
        }
+       
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

@@ -69,10 +69,8 @@ namespace AutoUpdate
             }
             catch
             {
-                this.Dispatcher.Invoke(new Action(() =>
-                {
                     Notice.Show("连接服务器失败，稍后重试","提示",3,MessageBoxIcon.Warning);
-                }));
+               
                 return;
             }
 
