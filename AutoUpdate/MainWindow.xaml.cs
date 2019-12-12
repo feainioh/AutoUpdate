@@ -37,9 +37,9 @@ namespace AutoUpdate
         private string softName;
 
         public IPEndPoint ServerIpEndPoint { get; set; }
-        public bool IsSystemDownLoad { get;  set; }
-        public bool CanWindowClose { get;  set; }
-        public string FilePath { get;  set; }
+        public bool IsSystemDownLoad { get; set; }
+        public bool CanWindowClose { get; set; }
+        public string FilePath { get; set; }
 
         /// <summary>
         /// 上位机服务器Http地址
@@ -151,7 +151,7 @@ namespace AutoUpdate
             //ThreadPool.QueueUserWorkItem(new WaitCallback(ConnectCallback), null);
 
             LoadConfig();
-            this.ApplicationRunPath = AppDomain.CurrentDomain.BaseDirectory;;
+            this.ApplicationRunPath = AppDomain.CurrentDomain.BaseDirectory; ;
             this.CheckVerRun = true;
 
             this.IIS_Url = string.Format("http://{0}:{1}/SoftUpdate/AutoUpdate.xml", RemoteHttp_IPAddr, RemoteHttp_Port);
@@ -210,6 +210,10 @@ namespace AutoUpdate
                     Dictionary<string, string> Path;
                     if (CheckVersion(out Path))
                     {
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            txt_FileAmt.Text = Path.Count.ToString("00");
+                        }));
                         Console.WriteLine(string.Format("{0}\t需要下载", DateTime.Now.ToString("HH:mm:ss:fff")));
                         MyFunction.AppendUpdate_LOG(string.Format("{0}\t需要下载", DateTime.Now.ToString("HH:mm:ss:fff")));
                         //开始下载
@@ -486,7 +490,7 @@ namespace AutoUpdate
             {
                 ShowStr(string.Format("下载开始:{0}\t文件大小:{1}", SaveName, GetLength(WebUrl)));
                 txt_FileName.Text = SaveName;
-                txt_FileAmt.Text = SizeToString( GetLength(WebUrl));
+                txt_FileAmt.Text = SizeToString(GetLength(WebUrl));
                 //调试
                 if (!Directory.Exists(UpdateTempFile))
                 {
