@@ -32,7 +32,7 @@ namespace UpLoadFiles
             InitializeComponent();
         }
 
-        private const string directory = "0123";
+        private const string directory = "SoftUpdate";
       public void Upload(string file)
       {
           FileInfo info = new FileInfo(file);
