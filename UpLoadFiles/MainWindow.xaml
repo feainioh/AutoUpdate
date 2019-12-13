@@ -6,7 +6,7 @@
         xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:UpLoadFiles"
         mc:Ignorable="d"
-        Title="上传文件" Height="300" Width="500" Icon="upload.ico" FontSize="16" FontFamily="{StaticResource FontAwesome}" Loaded="Window_Loaded">
+        Title="上传文件" Height="300" Width="500" Icon="upload.ico" FontSize="16" FontFamily="{StaticResource FontAwesome}">
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -32,12 +32,13 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <pu:PUTextBlock Grid.Column="0" Text="服务器地址:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="1" Margin="5" Name="txt_webUri"/>
+                    <TextBox Grid.Column="1" Margin="5" Name="txt_webUri" pu:TextBoxHelper.CornerRadius="4" pu:TextBoxHelper.FocusedBorderBrush="BlueViolet"/>
                     <Button Grid.Column="2" Width="100" Click="UploadFile_Click" Content="选择文件" Margin="5" pu:ButtonHelper.CornerRadius="4" pu:ButtonHelper.ButtonStyle="Hollow" BorderBrush="BlueViolet" Foreground="BlueViolet"/>
                 </Grid>
-                <DataGrid x:Name="dg_ServerFiles" pu:DataGridHelper.RowMinHeight="20" pu:DataGridHelper.HeaderMinHeight="25" pu:DataGridHelper.ColumnHorizontalContentAlignment="Center" pu:DataGridHelper.SelectedBackground="#440500FF" pu:DataGridHelper.HoverBackground="#220500FF" CanUserAddRows="False" Grid.Row="1" >
+                <DataGrid x:Name="dg_ServerFiles" ItemsSource="{Binding FileInfoList}"  AutoGenerateColumns="False"   pu:DataGridHelper.RowMinHeight="20" pu:DataGridHelper.HeaderMinHeight="25" pu:DataGridHelper.ColumnHorizontalContentAlignment="Center" pu:DataGridHelper.SelectedBackground="#440500FF" pu:DataGridHelper.HoverBackground="#220500FF" CanUserAddRows="False" Grid.Row="1" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="文件列表" Binding="{Binding WindowNO}"/>
+                        <DataGridTextColumn Header="文件列表" Binding="{Binding FileName}"/>
+                        <DataGridTextColumn Header="本地地址" Binding="{Binding FilePath}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
