@@ -1,35 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Configuration;
-using System.Threading;
-using System.Net.Sockets;
-using System.Net;
-using System.IO;
-using Panuon.UI.Silver;
-using System.Xml;
-using System.Net.NetworkInformation;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
-using System.Security.Cryptography;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
 
-namespace AutoUpdate
+namespace Update
 {
-    /// <summary>
-    /// MainWindow.xaml 的交互逻辑
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class Update : Form
     {
+        public Update()
+        {
+            InitializeComponent();
+        }
         #region 变量
         //服务器地址
         private string serverIP = string.Empty;
@@ -144,23 +136,6 @@ namespace AutoUpdate
 
 
         #endregion
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //读取配置信息
-            LoadConfig();
-            this.ApplicationRunPath = AppDomain.CurrentDomain.BaseDirectory; ;
-            this.CheckVerRun = true;
-
-            this.IIS_Url = string.Format("http://{0}:{1}/SoftUpdate/AutoUpdate.xml", RemoteHttp_IPAddr, RemoteHttp_Port);
-            this.UpdateTempFile = "temp";
-            this.BackupFile = "backup";
-            //初始化
-            InitIIS();
-        }
 
 
         /// <summary>
@@ -212,15 +187,15 @@ namespace AutoUpdate
                     Dictionary<string, string> Path;
                     if (CheckVersion(out Path))
                     {
-                        if (MessageBox.Show("服务器有最新版本是否下载?", MsgTitle, MessageBoxButton.OKCancel) != MessageBoxResult.OK)
+                        if (MessageBox.Show("服务器有最新版本是否下载?", MsgTitle, MessageBoxButtons.OKCancel) != DialogResult.OK)
                         {
                             Environment.Exit(0);
                         }
                         else
                         {
-                            this.Dispatcher.BeginInvoke(new Action(() =>
+                            this.BeginInvoke(new Action(() =>
                             {
-                                txt_FileAmt.Text = Path.Count.ToString("00");
+                                txt_FileCount.Text = Path.Count.ToString("00");
                                 pb_Total.Maximum = Path.Count;
                                 pb_Total.Value = 0;
                                 pb_Current.Value = 0;
@@ -310,7 +285,7 @@ namespace AutoUpdate
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBoxX.Show(string.Format("检查版本:{0}", ex.Message), MsgTitle);
+                MessageBox.Show(string.Format("检查版本:{0}", ex.Message), MsgTitle);
 #endif
                 Console.WriteLine(string.Format("{1} 检查版本:{0}", ex.Message, MsgTitle));
                 MyFunction.AppendUpdate_LOG(string.Format("{1} 检查版本:{0}", ex.Message, MsgTitle));
@@ -387,7 +362,7 @@ namespace AutoUpdate
                 else
                 {
                     ShowStr(sub.Value + "\t下载成功");
-                    this.Dispatcher.BeginInvoke(new Action(() =>
+                    this.BeginInvoke(new Action(() =>
                     {
                         pb_Total.Value += 1;
                     }));
@@ -412,7 +387,7 @@ namespace AutoUpdate
                 }
 
                 this.Download_Ver = this.Server_Ver;
-                if (MessageBox.Show("程序有新版本,是否升级？\r\n", "升级", MessageBoxButton.OKCancel) == MessageBoxResult.OK) PCUpdate();
+                if (MessageBox.Show("程序有新版本,是否升级？\r\n", "升级", MessageBoxButtons.OKCancel) == DialogResult.OK) PCUpdate();
                 else Thread.Sleep(Timeout.Infinite);
 
             }
@@ -460,7 +435,7 @@ namespace AutoUpdate
                 }
                 catch (Exception ex)
                 {
-                    ShowStr("备份文件异常:"+ex.Message);
+                    ShowStr("备份文件异常:" + ex.Message);
                 }
             }
         }
@@ -511,11 +486,11 @@ namespace AutoUpdate
             {
                 ShowStr(string.Format("下载开始:{0}\t文件大小:{1}", SaveName, GetLength(WebUrl)));
 
-                this.Dispatcher.BeginInvoke(new Action(() =>
+                this.BeginInvoke(new Action(() =>
                 {
                     txt_FileName.Text = SaveName;
                     txt_FileAmt.Text = SizeToString(GetLength(WebUrl));
-                    pb_Current.Maximum = GetLength(WebUrl);
+                    pb_Current.Maximum = (int)GetLength(WebUrl);
                 }));
                 //调试
                 if (!Directory.Exists(UpdateTempFile))
@@ -574,7 +549,7 @@ namespace AutoUpdate
         private void ShowStr(string str)
         {
             Console.WriteLine("{0}\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
-            this.Dispatcher.BeginInvoke(new Action(() =>
+            this.BeginInvoke(new Action(() =>
             {
                 txt_CurrentFile.Text = string.Format("{0}\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
             }));
@@ -590,13 +565,13 @@ namespace AutoUpdate
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             try
             {
-                string UpdateProgram = UpdateTempFile+@"\"+ AppName;
+                string UpdateProgram = UpdateTempFile + @"\" + AppName;
                 if (!File.Exists(UpdateProgram))
                 {
                     ShowStr("升级程序丢失");
                     return;
                 }
-               
+
                 string tempcopyname = "%($)%.exe";//临时复制的文件，不需要复制此文件
                 File.Copy(UpdateProgram, this.ApplicationRunPath + @"\" + tempcopyname, true);
                 //UpdateVersion(UpdateProgram, this.ApplicationRunPath + @"\" + AppName);
@@ -616,7 +591,7 @@ namespace AutoUpdate
 #if DEBUG
                 MessageBox.Show(ex.Message, "升级故障");
 #endif
-                MyFunction.AppendUpdate_LOG( "升级故障:"+ ex.Message);
+                MyFunction.AppendUpdate_LOG("升级故障:" + ex.Message);
             }
             finally
             {
@@ -678,6 +653,19 @@ namespace AutoUpdate
             File.WriteAllText("update.bat", str, ASCIIEncoding.Default);
             Process.Start("update.bat");
         }
-        
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //读取配置信息
+            LoadConfig();
+            this.ApplicationRunPath = AppDomain.CurrentDomain.BaseDirectory; ;
+            this.CheckVerRun = true;
+
+            this.IIS_Url = string.Format("http://{0}:{1}/SoftUpdate/AutoUpdate.xml", RemoteHttp_IPAddr, RemoteHttp_Port);
+            this.UpdateTempFile = "temp";
+            this.BackupFile = "backup";
+            //初始化
+            InitIIS();
+        }
     }
 }

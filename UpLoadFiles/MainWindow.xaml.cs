@@ -27,6 +27,23 @@ namespace UpLoadFiles
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
+        MyFunction myFunction = new MyFunction();
+        /// <summary>
+        /// 程序名称
+        /// </summary>
+        internal string AppName = "";
+        /// <summary>
+        /// 上位机服务器Http地址
+        /// </summary>
+        internal string RemoteHttp_IPAddr = "127.0.0.1";
+        /// <summary>
+        /// 上位机服务器Http端口号
+        /// </summary>
+        internal string RemoteHttp_Port = "8080";
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,8 +53,10 @@ namespace UpLoadFiles
       public void Upload(string file)
       {
           FileInfo info = new FileInfo(file);
-          string url = string.Format("http://192.168.31.118:54040/UploadFile.aspx?d={0}&n={1}", directory, info.Name);
-          WebClient client = new WebClient();
+          string url = string.Format("http://{0}:{1}/UploadFile.aspx?d={2}&n={3}", RemoteHttp_IPAddr, RemoteHttp_Port, directory, info.Name);
+            url = string.Format("http://{0}/",txt_webUri.Text.Trim());
+
+            WebClient client = new WebClient();
           client.Credentials = CredentialCache.DefaultCredentials; 
           client.UploadFileAsync(new Uri(url), file);
           client.UploadFileCompleted += new UploadFileCompletedEventHandler(result_UploadFileCompleted);
@@ -77,6 +96,18 @@ namespace UpLoadFiles
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadConfig();
+        }
+
+        /// <summary>
+        /// 读取配置文件里的相关信息
+        /// </summary>
+        private void LoadConfig()
+        {
+            Dictionary<string, string> dic_conf = myFunction.GetConfigSettings();
+            RemoteHttp_IPAddr = dic_conf["WebUri"];
+            RemoteHttp_Port = dic_conf["WebPort"];
+            AppName = dic_conf["AppName"];
         }
     }
 }

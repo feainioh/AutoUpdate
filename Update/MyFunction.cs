@@ -1,4 +1,21 @@
-﻿using System;
+﻿/**************************************************************************
+*   
+*   =================================
+*   CLR版本     ：4.0.30319.42000
+*   命名空间    ：Update
+*   文件名称    ：MyFunction.cs
+*   =================================
+*   创 建 者    ：LQZ
+*   创建日期    ：2019-12-13 17:33:43 
+*   功能描述    ：
+*   =================================
+*   修 改 者    ：
+*   修改日期    ：
+*   修改内容    ：
+*   =================================
+*  
+***************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -6,7 +23,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-namespace AutoUpdate
+
+namespace Update
 {
     class MyFunction
     {
@@ -36,7 +54,7 @@ namespace AutoUpdate
             string NowVersion = "V1.0";
             string filePath = AppName;
             System.Reflection.Assembly assembly = System.Reflection.Assembly.LoadFile(filePath);
-            object[]  attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute),false);
+            object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute), false);
             if (attributes.Length > 0)
             {
                 if (attributes.Length > 0)
