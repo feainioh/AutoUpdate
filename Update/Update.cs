@@ -548,10 +548,10 @@ namespace Update
         }
         private void ShowStr(string str)
         {
-            Console.WriteLine("{0}\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
+            //Console.WriteLine("{0}\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
             this.BeginInvoke(new Action(() =>
             {
-                txt_CurrentFile.Text = string.Format("{0}\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
+                txt_CurrentFile.Text = string.Format("{0}-\t{1}", DateTime.Now.ToString("HH:mm:ss"), str);
             }));
             if (EventShowStr != null) EventShowStr(str);
         }
@@ -589,7 +589,7 @@ namespace Update
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(ex.Message, "升级故障");
+                ShowStr("升级故障:"+ ex.Message);
 #endif
                 MyFunction.AppendUpdate_LOG("升级故障:" + ex.Message);
             }

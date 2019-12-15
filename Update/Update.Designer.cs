@@ -54,18 +54,16 @@
             this.txt_FileAmt.AutoSize = true;
             this.txt_FileAmt.Location = new System.Drawing.Point(421, 73);
             this.txt_FileAmt.Name = "txt_FileAmt";
-            this.txt_FileAmt.Size = new System.Drawing.Size(55, 15);
+            this.txt_FileAmt.Size = new System.Drawing.Size(0, 15);
             this.txt_FileAmt.TabIndex = 1;
-            this.txt_FileAmt.Text = "label1";
             // 
             // txt_CurrentFile
             // 
             this.txt_CurrentFile.AutoSize = true;
             this.txt_CurrentFile.Location = new System.Drawing.Point(12, 121);
             this.txt_CurrentFile.Name = "txt_CurrentFile";
-            this.txt_CurrentFile.Size = new System.Drawing.Size(55, 15);
+            this.txt_CurrentFile.Size = new System.Drawing.Size(0, 15);
             this.txt_CurrentFile.TabIndex = 3;
-            this.txt_CurrentFile.Text = "label3";
             // 
             // txt_FileName
             // 
