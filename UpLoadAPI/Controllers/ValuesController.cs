@@ -15,27 +15,6 @@ namespace UpLoadAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
-        }
-
 
         [HttpPost]
         public async Task<IHttpActionResult> UploadFile(int count) //接收参数
@@ -54,6 +33,8 @@ namespace UpLoadAPI.Controllers
                 var provider = new MultipartFormDataStreamProvider(path);
                 await Request.Content.ReadAsMultipartAsync(provider);//获取
 
+                //更新文件的文件夹
+                DirectoryInfo saveDir = new DirectoryInfo(save_Path); 
                 foreach (MultipartFileData file in provider.FileData) //保存
                 {
                     var guid = Guid.NewGuid().ToString("N");
@@ -63,8 +44,6 @@ namespace UpLoadAPI.Controllers
                     var newpath = Path.Combine(path, newFileName);//组成新的路径
                     File.Move(file.LocalFileName, newpath); //这个地方采用File.Move 移动到指定位子赋值指定名称(原因可以调式~~~~~)
                 }
-                //更新文件的文件夹爱
-                DirectoryInfo saveDir = new DirectoryInfo(save_Path); 
                 return Ok(true);
             }
             catch (Exception ex)

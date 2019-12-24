@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -8,9 +9,43 @@ using System.Threading.Tasks;
 using System.Xml;
 namespace UpLoadFiles
 {
+    public class FileInfoModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private string _name;
+
+        public string FileName
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                RaisePropertyChanged("FileName");
+            }
+        }
+
+
+        private string _path;
+
+
+        public string FilePath
+        {
+            get { return _path; }
+            set
+            {
+                _path = value;
+                RaisePropertyChanged("FilePath");
+            }
+        }
+
+    }
     class MyFunction
     {
-
         /// <summary>
         /// 读取配置文件中的配置信息
         /// </summary>
@@ -36,7 +71,7 @@ namespace UpLoadFiles
             string NowVersion = "V1.0";
             string filePath = AppName;
             System.Reflection.Assembly assembly = System.Reflection.Assembly.LoadFile(filePath);
-            object[]  attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute),false);
+            object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute), false);
             if (attributes.Length > 0)
             {
                 if (attributes.Length > 0)

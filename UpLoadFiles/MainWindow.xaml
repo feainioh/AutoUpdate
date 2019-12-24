@@ -6,7 +6,7 @@
         xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:UpLoadFiles"
         mc:Ignorable="d"
-        Title="上传文件" Height="300" Width="500" Icon="upload.ico" FontSize="16" FontFamily="{StaticResource FontAwesome}">
+        Title="上传文件" Height="300" Width="500" Icon="upload.ico" FontSize="16" FontFamily="{StaticResource FontAwesome}" Loaded="Window_Loaded">
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -23,6 +23,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height=" auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -33,9 +34,19 @@
                     </Grid.ColumnDefinitions>
                     <pu:PUTextBlock Grid.Column="0" Text="服务器地址:" VerticalAlignment="Center"/>
                     <TextBox Grid.Column="1" Margin="5" Name="txt_webUri" pu:TextBoxHelper.CornerRadius="4" pu:TextBoxHelper.FocusedBorderBrush="BlueViolet"/>
-                    <Button Grid.Column="2" Width="100" Click="UploadFile_Click" Content="选择文件" Margin="5" pu:ButtonHelper.CornerRadius="4" pu:ButtonHelper.ButtonStyle="Hollow" BorderBrush="BlueViolet" Foreground="BlueViolet"/>
+                    <Button Grid.Column="2" Width="100" Click="TestURI_Click" Content="测试连接" Margin="5" pu:ButtonHelper.CornerRadius="4" pu:ButtonHelper.ButtonStyle="Hollow" BorderBrush="#FF9B00FF" Foreground="#FF9B00FF" pu:ButtonHelper.HoverBrush="#9B00FF"/>
                 </Grid>
-                <DataGrid x:Name="dg_ServerFiles" ItemsSource="{Binding FileInfoList}"  AutoGenerateColumns="False"   pu:DataGridHelper.RowMinHeight="20" pu:DataGridHelper.HeaderMinHeight="25" pu:DataGridHelper.ColumnHorizontalContentAlignment="Center" pu:DataGridHelper.SelectedBackground="#440500FF" pu:DataGridHelper.HoverBackground="#220500FF" CanUserAddRows="False" Grid.Row="1" >
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Grid.Row="1" Width="100" Click="ChooseFile_Click" Content="选择文件" Margin="5" pu:ButtonHelper.CornerRadius="4" pu:ButtonHelper.ButtonStyle="Hollow" BorderBrush="#FF9B00FF" Foreground="#FF9B00FF" pu:ButtonHelper.HoverBrush="#9B00FF"/>
+                    <Button Grid.Column="1" Width="100" Click="Button_Click" Content="上传文件" Margin="5" pu:ButtonHelper.CornerRadius="4" pu:ButtonHelper.ButtonStyle="Hollow" BorderBrush="#FF9B00FF" Foreground="#FF9B00FF" pu:ButtonHelper.HoverBrush="#9B00FF"/>
+
+                </Grid>
+                <DataGrid x:Name="dg_ServerFiles" ItemsSource="{Binding FileInfoList,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False"   pu:DataGridHelper.RowMinHeight="20" pu:DataGridHelper.HeaderMinHeight="25" pu:DataGridHelper.ColumnHorizontalContentAlignment="Center" pu:DataGridHelper.SelectedBackground="#440500FF" pu:DataGridHelper.HoverBackground="#220500FF" CanUserAddRows="False" Grid.Row="2" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="文件列表" Binding="{Binding FileName}"/>
                         <DataGridTextColumn Header="本地地址" Binding="{Binding FilePath}"/>
