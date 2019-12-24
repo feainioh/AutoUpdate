@@ -12,9 +12,10 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <ProgressBar Grid.Row="0" Height="150" Width="150"  pu:ProgressBarHelper.ProgressBarStyle="Ring" pu:ProgressBarHelper.IsPercentVisible="True" FontSize="35" Maximum="{Binding ElementName=pb_Total,Path=Maximum,Mode=OneWay}" Value="{Binding ElementName=pb_Total,Path=Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Foreground="YellowGreen"></ProgressBar>
+        <ProgressBar Grid.Row="0" Height="130" Width="130"  pu:ProgressBarHelper.ProgressBarStyle="Ring" pu:ProgressBarHelper.IsPercentVisible="True" FontSize="35" Maximum="{Binding ElementName=pb_Total,Path=Maximum,Mode=OneWay}" Value="{Binding ElementName=pb_Total,Path=Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Foreground="YellowGreen"></ProgressBar>
         <Grid Grid.Row="1" Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -29,7 +30,7 @@
             </Grid.ColumnDefinitions>
             <pu:PUTextBlock Grid.Row="0" Grid.Column="0" Text="文件数量:" Margin="2"/>
             <pu:PUTextBlock x:Name="txt_FileCount" Grid.Row="0" Grid.Column="1" Text="1" Margin="2"/>
-            <pu:PUTextBlock x:Name="txt_CurrentFile" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" Text="1" Margin="2"/>
+            <pu:PUTextBlock x:Name="txt_CurrentFile" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Text="1" Margin="2"/>
             <pu:PUTextBlock Grid.Row="1" HorizontalAlignment="Left" Grid.Column="0" Text="总进度:" Margin="2"/>
             <ProgressBar x:Name="pb_Total" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Maximum="100" Value="0" Foreground="YellowGreen" pu:ProgressBarHelper.CornerRadius="5" pu:ProgressBarHelper.IsPercentVisible="True"  Margin="2"/>
             <pu:PUTextBlock Grid.Row="2" Grid.Column="0" Text="文件名:" Margin="2"/>
