@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using SharpCompress.Archives;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+using SharpCompress.Writers;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,7 +42,7 @@ namespace AutoUpdate
             string NowVersion = "V1.0";
             string filePath = AppName;
             System.Reflection.Assembly assembly = System.Reflection.Assembly.LoadFile(filePath);
-            object[]  attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute),false);
+            object[] attributes = assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyFileVersionAttribute), false);
             if (attributes.Length > 0)
             {
                 if (attributes.Length > 0)
@@ -372,5 +378,84 @@ namespace AutoUpdate
 
         }
 
+    }
+
+    /// <summary>
+    /// 压缩文件操作类
+    /// </summary>
+    class ZipRarHelper
+    {
+        #region RAR类型的压缩文件
+        /// <summary>
+        /// 将格式为rar的压缩文件解压到指定的目录
+        /// </summary>
+        /// <param name="RarFileName">要解压rar文件的路径</param>
+        /// <param name="SaveDir">解压后要保存到的目录</param>
+        public static void DeCompressRAR(string RarFileName, string SaveDir)
+        {
+            using (Stream stream = File.OpenRead(RarFileName))
+            {
+                var reader = ReaderFactory.Open(stream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        Console.WriteLine(reader.Entry.Key);
+                        reader.WriteEntryToDirectory(SaveDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ZIP类型的压缩文件
+        public static void CompressZipFile(string SourceFileName, string FileName)
+        {
+            //指定要压缩的文件夹路径
+            var zipPath = SourceFileName;
+            using (Stream zipStream = File.OpenWrite(zipPath))
+            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, CompressionType.BZip2))
+            {
+                zipWriter.WriteAll(FileName, "*", SearchOption.AllDirectories);
+            }
+        }
+
+        /// <summary>
+        /// 将一系列文件压缩到指定ZIP文件  todo 下载文件大小为0，待修改！
+        /// </summary>
+        /// <param name="filePaths"></param>
+        private MemoryStream CompressionZIP(List<string> filePaths)
+        {
+            var zipStream = new MemoryStream();
+            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, CompressionType.BZip2))
+            {
+                foreach (var filePath in filePaths)
+                {
+                    zipWriter.Write(Path.GetFileName(filePath), filePath);
+                    //zipStream.Flush();
+                }
+            }
+            return zipStream;
+        }
+
+        /// <summary>
+        /// 解压缩Zip
+        /// </summary>
+        /// <param name="zipFileStream">ZIP文件流</param>
+        /// <param name="savePath">解压后保存路径</param>
+        private void UnZip(Stream zipFileStream, string savePath)
+        {
+            using (var archive = ArchiveFactory.Open(zipFileStream))
+            {
+                foreach (var entry in archive.Entries)
+                {
+                    if (!entry.IsDirectory)
+                    {
+                        entry.WriteToDirectory(savePath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
