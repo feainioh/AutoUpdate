@@ -425,35 +425,72 @@ namespace AutoUpdate
         /// </summary>
         /// <param name="filePaths"></param>
         private MemoryStream CompressionZIP(List<string> filePaths)
-        {
+        { 
+            //设置属性
+            WriterOptions options = new WriterOptions(CompressionType.Deflate);
+            options.ArchiveEncoding.Default = Encoding.UTF8;
             var zipStream = new MemoryStream();
-            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, CompressionType.BZip2))
+            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, options))
             {
                 foreach (var filePath in filePaths)
                 {
                     zipWriter.Write(Path.GetFileName(filePath), filePath);
-                    //zipStream.Flush();
                 }
             }
             return zipStream;
         }
 
         /// <summary>
-        /// 解压缩Zip
+        /// 解压zip文件
         /// </summary>
-        /// <param name="zipFileStream">ZIP文件流</param>
-        /// <param name="savePath">解压后保存路径</param>
-        private void UnZip(Stream zipFileStream, string savePath)
+        /// <param name="SourceFileName">需要解压的压缩包的文件路径</param>
+        /// <param name="FileName">解压后保存的文件路径</param>
+        /// <returns></returns>
+        public bool ArchiveZipFile(string SourceFileName, string FileName)
         {
-            using (var archive = ArchiveFactory.Open(zipFileStream))
+            try
             {
+                var archive = ArchiveFactory.Open(SourceFileName);
                 foreach (var entry in archive.Entries)
                 {
                     if (!entry.IsDirectory)
                     {
-                        entry.WriteToDirectory(savePath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        entry.WriteToDirectory(FileName, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
                     }
                 }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 创建zip压缩文件
+        /// </summary>
+        /// <param name="SourceFileName">需要压缩的文件的路径</param>
+        /// <param name="FileName">创建的压缩文件的路径</param>
+        /// <returns></returns>
+        public bool CompressZipFiles(string SourceFileName, string FileName)
+        {
+            try
+            {
+                //设置属性
+                WriterOptions options = new WriterOptions(CompressionType.Deflate);
+                options.ArchiveEncoding.Default = Encoding.UTF8;
+                //指定要压缩的文件夹路径
+                using (var zip = File.OpenWrite(FileName))
+                using (var zipWriter = WriterFactory.Open(zip, ArchiveType.Zip, options))
+                {
+                    zipWriter.Write(Path.GetFileName(SourceFileName), SourceFileName);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
         #endregion

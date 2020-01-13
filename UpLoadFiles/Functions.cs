@@ -1,4 +1,8 @@
-﻿using System;
+﻿using SharpCompress.Archives;
+using SharpCompress.Common;
+using SharpCompress.Readers;
+using SharpCompress.Writers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -408,4 +412,121 @@ namespace UpLoadFiles
         }
 
     }
+
+    /// <summary>
+    /// 压缩文件操作类
+    /// </summary>
+    class ZipRarHelper
+    {
+        #region RAR类型的压缩文件
+        /// <summary>
+        /// 将格式为rar的压缩文件解压到指定的目录
+        /// </summary>
+        /// <param name="RarFileName">要解压rar文件的路径</param>
+        /// <param name="SaveDir">解压后要保存到的目录</param>
+        public static void DeCompressRAR(string RarFileName, string SaveDir)
+        {
+            using (Stream stream = File.OpenRead(RarFileName))
+            {
+                var reader = ReaderFactory.Open(stream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        Console.WriteLine(reader.Entry.Key);
+                        reader.WriteEntryToDirectory(SaveDir, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ZIP类型的压缩文件
+        public static void CompressZipFile(string SourceFileName, string FileName)
+        {
+            //指定要压缩的文件夹路径
+            var zipPath = SourceFileName;
+            using (Stream zipStream = File.OpenWrite(zipPath))
+            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, CompressionType.BZip2))
+            {
+                zipWriter.WriteAll(FileName, "*", SearchOption.AllDirectories);
+            }
+        }
+
+        /// <summary>
+        /// 将一系列文件压缩到指定ZIP文件  todo 下载文件大小为0，待修改！
+        /// </summary>
+        /// <param name="filePaths"></param>
+        private MemoryStream CompressionZIP(List<string> filePaths)
+        {
+            //设置属性
+            WriterOptions options = new WriterOptions(CompressionType.Deflate);
+            options.ArchiveEncoding.Default = Encoding.UTF8;
+            var zipStream = new MemoryStream();
+            using (var zipWriter = WriterFactory.Open(zipStream, ArchiveType.Zip, options))
+            {
+                foreach (var filePath in filePaths)
+                {
+                    zipWriter.Write(Path.GetFileName(filePath), filePath);
+                }
+            }
+            return zipStream;
+        }
+
+        /// <summary>
+        /// 解压zip文件
+        /// </summary>
+        /// <param name="SourceFileName">需要解压的压缩包的文件路径</param>
+        /// <param name="FileName">解压后保存的文件路径</param>
+        /// <returns></returns>
+        public bool ArchiveZipFile(string SourceFileName, string FileName)
+        {
+            try
+            {
+                var archive = ArchiveFactory.Open(SourceFileName);
+                foreach (var entry in archive.Entries)
+                {
+                    if (!entry.IsDirectory)
+                    {
+                        entry.WriteToDirectory(FileName, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// 创建zip压缩文件
+        /// </summary>
+        /// <param name="SourceFileName">需要压缩的文件的路径</param>
+        /// <param name="FileName">创建的压缩文件的路径</param>
+        /// <returns></returns>
+        public bool CompressZipFiles(string SourceFileName, string FileName)
+        {
+            try
+            {
+                //设置属性
+                WriterOptions options = new WriterOptions(CompressionType.Deflate);
+                options.ArchiveEncoding.Default = Encoding.UTF8;
+                //指定要压缩的文件夹路径
+                using (var zip = File.OpenWrite(FileName))
+                using (var zipWriter = WriterFactory.Open(zip, ArchiveType.Zip, options))
+                {
+                    zipWriter.Write(Path.GetFileName(SourceFileName), SourceFileName);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+    }
+
 }
