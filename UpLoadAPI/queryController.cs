@@ -49,7 +49,7 @@ namespace UpLoadAPI
     public class PersonController : ApiController
     {
         Person[] personList = new Person[] {
-            new Person { Id= 1,Age = 2,Name="DANNY"},
+            new Person { Id= 1,Age = 2,Name="DANNY0"},
             new Person { Id = 2,Age = 3,Name = "Danny123"},
             new Person { Id =3,Age = 4,Name = "dANNY456"}
         };
@@ -64,7 +64,16 @@ namespace UpLoadAPI
         }
 
         [HttpGet]
-        [Route("api/person/Get")]
+        [Route("api/Files/GetApp")]
+        public List<Person> GetApps()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("GetPersonListAll");
+            return personList.ToList();
+        }
+
+        [HttpPost]
+        [Route("api/Files/PostFile")]
         public List<Person> Get(string id)
         {
             return personList.ToList();

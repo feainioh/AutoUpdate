@@ -13,12 +13,12 @@ namespace UpLoadAPI
         static void Main(string[] args)
         {
             DisbleQuickEditMode();//禁用快速编辑模式
-            string baseAddress = "监听地址 http://localhost:9000/";
+            string baseAddress = "http://localhost:9000/";
             Console.ForegroundColor = ConsoleColor.Magenta;//设置背景颜色
             using (Microsoft.Owin.Hosting.WebApp.Start<Startup>(url: baseAddress))
             {
                 HttpClient client = new HttpClient();
-                Console.WriteLine(baseAddress);
+                Console.WriteLine("监听地址："+baseAddress);
                 Console.ReadLine();
             }
         }
