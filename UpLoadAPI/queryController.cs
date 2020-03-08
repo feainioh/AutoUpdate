@@ -17,7 +17,9 @@
 ***************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -46,7 +48,7 @@ namespace UpLoadAPI
         }
     }
 
-    public class PersonController : ApiController
+    public class UpdateController : ApiController
     {
         Person[] personList = new Person[] {
             new Person { Id= 1,Age = 2,Name="DANNY0"},
@@ -72,11 +74,62 @@ namespace UpLoadAPI
             return personList.ToList();
         }
 
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="SaveAdd">上传文件保存的目录</param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("api/Files/PostFile")]
-        public List<Person> Get(string id)
+        [Route ("api/Files/UpLoadFile")]
+        public async Task<ResultObj> UploadFile(string SaveAdd)
         {
-            return personList.ToList();
+            ResultObj resultObj = new ResultObj()
+            {
+                Success = false
+            };
+
+            var provider = new MultipartMemoryStreamProvider();
+
+            //读取文件数据
+            await Request.Content.ReadAsMultipartAsync(provider);
+
+            //检查是否存在目录  
+            if (!Directory.Exists(SaveAdd)) Directory.CreateDirectory(SaveAdd);
+
+            if (provider.Contents.Count == 0)
+            {
+                resultObj.Msg = "没有文件";
+            }
+            else
+            {
+                var item = provider.Contents[0];
+                // 判断是否是文件
+                if (item.Headers.ContentDisposition.FileName != null)
+                {
+                    //获取到流
+                    var ms = item.ReadAsStreamAsync().Result;
+                    //进行流操作
+                    using (var br = new BinaryReader(ms))
+                    {
+                        if (ms.Length <= 0)
+                        {
+                            resultObj.Msg = "文件长度为空";
+                        }
+                        //读取文件内容到内存中
+                        byte[] data = br.ReadBytes((int)ms.Length);
+                        //data就是取出的文件流啦
+                        
+
+
+                    }
+                }
+                else
+                {
+                    resultObj.Msg = "未知的上传内容";
+                }
+            }
+
+            return resultObj;
         }
     }
 }
