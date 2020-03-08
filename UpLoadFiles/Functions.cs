@@ -1,22 +1,55 @@
-﻿using Microsoft.Win32;
-using SharpCompress.Archives;
+﻿using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
 using SharpCompress.Writers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-namespace AutoUpdate
+namespace UpLoadFiles
 {
+    public class FileInfoModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private string _name;
+
+        public string FileName
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                RaisePropertyChanged("FileName");
+            }
+        }
+
+
+        private string _path;
+
+
+        public string FilePath
+        {
+            get { return _path; }
+            set
+            {
+                _path = value;
+                RaisePropertyChanged("FilePath");
+            }
+        }
+
+    }
     class MyFunction
     {
-
         /// <summary>
         /// 读取配置文件中的配置信息
         /// </summary>
@@ -425,7 +458,7 @@ namespace AutoUpdate
         /// </summary>
         /// <param name="filePaths"></param>
         private MemoryStream CompressionZIP(List<string> filePaths)
-        { 
+        {
             //设置属性
             WriterOptions options = new WriterOptions(CompressionType.Deflate);
             options.ArchiveEncoding.Default = Encoding.UTF8;
@@ -495,4 +528,5 @@ namespace AutoUpdate
         }
         #endregion
     }
+
 }

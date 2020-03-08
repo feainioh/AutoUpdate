@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Update
+namespace ZIPTestDemo
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Update
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Update());
+            Application.Run(new Form1());
         }
     }
 }
